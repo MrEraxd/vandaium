@@ -1,0 +1,7 @@
+{
+  "quoteProps": "consistent",
+  "vueIndentScriptAndStyle": true,
+  "singleAttributePerLine": true,
+  "printWidth": 80,
+  "htmlWhitespaceSensitivity": "ignore"
+}
