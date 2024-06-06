@@ -1,80 +1,34 @@
-<script setup>
-  const route = useRoute();
-  const quantity = ref(1);
+<script setup lang="ts">
+  import type { TheBreadcrumbsProps } from "@/components/TheBreadcrumbs.vue";
+  import type { ProductGalleryProps } from "~/components/Product/ProductGallery.vue";
 
-  const { data } = useAsyncData(
-    "productSsr",
-    () => $fetch(`http://127.0.0.1:8000/products/${route.params.id}`),
-    {
-      dedupe: "defer",
-    }
-  );
+  const breadcrumbsInfo: TheBreadcrumbsProps = {
+    links: [
+      { name: "Monitory", href: "/category/monitors" },
+      { name: "Monitory OLED", href: "/category/monitors-oled" },
+      { name: "Monitor MSI MPG 271QRX QD-OLED", href: "" },
+    ],
+  };
 
-  function addToCart() {
-    console.log("Adding to cart", data.value.name, quantity.value);
-  }
+  const productGalleryInfo: ProductGalleryProps = {
+    images: [
+      "https://via.placeholder.com/100",
+      "https://via.placeholder.com/200",
+      "https://via.placeholder.com/300",
+      "https://via.placeholder.com/400",
+      "https://via.placeholder.com/500",
+      "https://via.placeholder.com/500",
+      "https://via.placeholder.com/500",
+      "https://via.placeholder.com/500",
+      "https://via.placeholder.com/500",
+    ],
+  };
 </script>
 
 <template>
-  <div>
-    <TheBreadcrumbs />
+  <div class="flex flex-col gap-y-3">
+    <TheBreadcrumbs v-bind="breadcrumbsInfo" />
 
-    <div class="grid grid-cols-2 gap-2">
-      <div class="grid gap-2 grid-cols-2">
-        <NuxtImg
-          v-for="(img, index) in data?.images"
-          :key="img + index"
-          :class="index === 0 ? 'col-span-2' : 'col-span-1'"
-          :src="`/images/${img}`"
-        />
-      </div>
-
-      <div>
-        <h1 class="text-xl font-semibold">{{ data?.name }}</h1>
-
-        <div class="grid grid-cols-2">
-          <div>
-            <div
-              v-for="([key, value], index) in Object.entries(
-                data?.specification
-              )"
-              :key="key + index"
-              class="grid grid-cols-2 gap-2"
-            >
-              <span>{{ key }}</span>
-              <span>{{ value }}</span>
-            </div>
-          </div>
-
-          <div class="flex flex-col">
-            <ProductPrice />
-
-            <div>
-              <select v-model="quantity">
-                <option
-                  v-for="(_, index) in Array(9)"
-                  :key="index"
-                  :value="index + 1"
-                  :selected="index === 0"
-                >
-                  {{ index + 1 }}
-                </option>
-              </select>
-
-              <button
-                @click="addToCart"
-                class="bg-teal-100 py-2 rounded"
-              >
-                Dodaj do koszyka
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <RecommendedProducts />
-
-    <ProductDescription />
+    <ProductGallery v-bind="productGalleryInfo" />
   </div>
 </template>

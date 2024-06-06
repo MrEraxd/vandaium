@@ -1,13 +1,43 @@
 <template>
-  <header class="my-6">
-    <div class="container mx-auto flex">
-      <div>Logo</div>
-      <nav class="">
-        <ul class="flex gap-x-2">
-          <li><NuxtLink to="/">Homepage</NuxtLink></li>
-          <li><NuxtLink to="/product/1">Product page</NuxtLink></li>
-          <li><NuxtLink to="/listing">Listing page</NuxtLink></li>
-          <li><NuxtLink to="/category">Category page</NuxtLink></li>
+  <header class="bg-white shadow-sm mb-4">
+    <div class="container mx-auto flex justify-between py-6">
+      <NuxtLink to="/">
+        <BaseSvg svg-name="logo" />
+      </NuxtLink>
+
+      <nav>
+        <ul class="flex gap-x-6 items-center">
+          <li>
+            <NuxtLink to="/myaccount/overview">
+              <BaseSvg svg-name="icon-user" />
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/wishlist">
+              <BaseSvg svg-name="icon-heart" />
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/basket">
+              <BaseSvg svg-name="icon-cart" />
+            </NuxtLink>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="container mx-auto flex py-2">
+      <nav>
+        <ul class="flex gap-4 items-center">
+          <li>
+            <NuxtLink to="/categories/computer">Komputery</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/categories/smartphones">Smartfony</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/categories/pc-part">Podzespoły komputerowe</NuxtLink>
+          </li>
         </ul>
       </nav>
     </div>
