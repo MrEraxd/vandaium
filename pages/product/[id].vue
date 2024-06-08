@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { TheBreadcrumbsProps } from "@/components/TheBreadcrumbs.vue";
-  import type { ProductGalleryProps } from "~/components/Product/ProductGallery.vue";
+  import type { Product } from "@localTypes/Product";
 
   const breadcrumbsInfo: TheBreadcrumbsProps = {
     links: [
@@ -10,25 +10,19 @@
     ],
   };
 
-  const productGalleryInfo: ProductGalleryProps = {
-    images: [
-      "https://via.placeholder.com/100",
-      "https://via.placeholder.com/200",
-      "https://via.placeholder.com/300",
-      "https://via.placeholder.com/400",
-      "https://via.placeholder.com/500",
-      "https://via.placeholder.com/500",
-      "https://via.placeholder.com/500",
-      "https://via.placeholder.com/500",
-      "https://via.placeholder.com/500",
-    ],
-  };
+  const { data: product } = await useAsyncData<Product>(
+    "product",
+    () => $fetch("http://127.0.0.1:8000/products/1"),
+    {
+      dedupe: "cancel",
+    }
+  );
 </script>
 
 <template>
   <div class="flex flex-col gap-y-3">
     <TheBreadcrumbs v-bind="breadcrumbsInfo" />
 
-    <ProductGallery v-bind="productGalleryInfo" />
+    <ProductGallery :images="product?.images" />
   </div>
 </template>

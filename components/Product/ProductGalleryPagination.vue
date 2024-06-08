@@ -1,21 +1,25 @@
 <script setup lang="ts">
+  import type { ProductImage } from "@localTypes/Product";
+
   export interface ProductGalleryPaginationProps {
-    images: Array<string>;
+    images: ProductImage[];
   }
 
   const props = defineProps<ProductGalleryPaginationProps>();
+  const currentImageIndex = defineModel({ default: 0 });
+
   const scrollableContainer = ref();
   const { y } = useScroll(scrollableContainer, { behavior: "smooth" });
 
-  function printScrollPosition(e: Event) {
-    console.log((e.target as HTMLElement).scrollTop);
+  function handleImageClicked(index: number) {
+    currentImageIndex.value = index;
   }
 </script>
 
 <template>
   <div class="flex flex-col gap-y-2 w-24">
     <button
-      @click="y -= 100"
+      @click="y -= 60"
       class="bg-white py-2 rounded-sm flex items-center justify-center"
     >
       <BaseSvg svg-name="icon-arrow-product-gallery" />
@@ -23,23 +27,23 @@
 
     <div
       ref="scrollableContainer"
-      @scroll="printScrollPosition"
-      class="w-full flex gap-y-2 flex-col *:bg-white *:aspect-square max-h-[480px] overflow-y-scroll no-scrollbar snap-y snap-mandatory scroll-smooth"
+      class="w-full flex gap-y-2 flex-col *:bg-white *:aspect-square] overflow-y-scroll no-scrollbar snap-y snap-mandatory scroll-smooth"
     >
       <div
-        v-for="image in images"
-        :key="image"
+        v-for="(image, index) in images"
+        :key="image.alt"
+        @click="handleImageClicked(index)"
         class="flex snap-start"
       >
         <img
-          :src="images[0]"
-          alt="Product Image"
+          class="w-full aspect-square p-4 object-contain"
+          :src="image.sizes.sm ?? undefined"
         />
       </div>
     </div>
 
     <button
-      @click="y += 100"
+      @click="y += 60"
       class="bg-white py-2 rounded-sm flex items-center justify-center"
     >
       <BaseSvg

@@ -30,13 +30,13 @@
       <nav>
         <ul class="flex gap-4 items-center">
           <li>
-            <NuxtLink to="/categories/computer">Komputery</NuxtLink>
+            <NuxtLink to="/category/computer">Komputery</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/categories/smartphones">Smartfony</NuxtLink>
+            <NuxtLink to="/category/smartphones">Smartfony</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/categories/pc-part">Podzespoły komputerowe</NuxtLink>
+            <NuxtLink to="/category/pc-part">Podzespoły komputerowe</NuxtLink>
           </li>
         </ul>
       </nav>
