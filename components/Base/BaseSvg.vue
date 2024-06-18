@@ -21,7 +21,7 @@
   });
 
   const AsyncIcon = defineAsyncComponent(
-    () => import(`../../assets/svg/${props.svgName}.svg`)
+    () => import(`../../assets/svg/${props.svgName.toLowerCase()}.svg`)
   );
 </script>
 

@@ -11,7 +11,7 @@
     <div class="flex gap-3 items-center">
       <NuxtLink to="/">
         <BaseSvg
-          class="[&_path]:hover:stroke-primary-300 [&_path]:transition-colors [&_path]:duration-100"
+          class="[&_path]:hover:stroke-primary-300 [&_path]:transition-colors [&_path]:duration-100 -translate-y-px"
           svg-name="icon-home"
         />
       </NuxtLink>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { TheBreadcrumbsProps } from "@/components/TheBreadcrumbs.vue";
-  import type { Product } from "@localTypes/Product";
 
   const breadcrumbsInfo: TheBreadcrumbsProps = {
     links: [
@@ -10,19 +9,28 @@
     ],
   };
 
-  const { data: product } = await useAsyncData<Product>(
-    "product",
-    () => $fetch("http://127.0.0.1:8000/products/1"),
-    {
-      dedupe: "cancel",
-    }
-  );
+  const { $api } = useNuxtApp();
+  const { data: product } = await $api.productService.getProduct();
 </script>
 
 <template>
   <div class="flex flex-col gap-y-3">
     <TheBreadcrumbs v-bind="breadcrumbsInfo" />
 
-    <ProductGallery :images="product?.images" />
+    <div class="flex gap-x-3">
+      <ProductGallery />
+
+      <ProductShortSpecification />
+
+      <ProductAddToCartSection
+        v-if="product"
+        :badges="product?.badges"
+        :product-name="product?.name"
+        :catalog-number="product?.id"
+        :reviews="product?.reviews"
+      />
+    </div>
+
+    <ProductDescription />
   </div>
 </template>

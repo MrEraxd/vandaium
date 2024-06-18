@@ -5,7 +5,7 @@
     images: ProductImage[];
   }
 
-  const props = defineProps<ProductGalleryPaginationProps>();
+  defineProps<ProductGalleryPaginationProps>();
   const currentImageIndex = defineModel({ default: 0 });
 
   const scrollableContainer = ref();

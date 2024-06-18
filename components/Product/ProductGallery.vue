@@ -1,27 +1,22 @@
 <script setup lang="ts">
-  import type { ProductImage } from "@localTypes/Product";
-
-  export interface ProductGalleryProps {
-    images: ProductImage[];
-  }
-
-  const props = defineProps<ProductGalleryProps>();
-
+  const { $api } = useNuxtApp();
   const currentImageIndex = ref(0);
+
+  const { data: product } = await $api.productService.getProduct();
 </script>
 
 <template>
-  <div class="flex gap-x-3 items-start h-[520px]">
+  <div class="flex gap-x-3 items-start h-[480px]">
     <ProductGalleryPagination
       class="h-full"
       v-model="currentImageIndex"
-      :images="images"
+      :images="product?.images ?? []"
     />
 
     <div class="aspect-square bg-white h-full p-16 grid place-items-center">
       <NuxtImg
         class=""
-        :src="images?.[currentImageIndex]?.sizes.sm ?? undefined"
+        :src="product?.images?.[currentImageIndex]?.sizes.sm ?? undefined"
       />
     </div>
   </div>

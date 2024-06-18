@@ -41,4 +41,17 @@ export default defineNuxtConfig({
       ],
     },
   },
+  hooks: {
+    async "nitro:config"(nitroConfig) {
+      // fetch the routes from our function above
+      const slugs = ["/product/1"];
+      // add the routes to the nitro config
+      nitroConfig.prerender.routes.push(...slugs);
+    },
+  },
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: "",
+    },
+  },
 });
