@@ -1,6 +1,8 @@
 <script setup lang="ts">
+  import type { Breadcrumb } from "~/localTypes/Breadcrumbs";
+
   export interface TheBreadcrumbsProps {
-    links: Array<{ name: string; href: string }>;
+    breadcrumbs: Breadcrumb[];
   }
 
   const props = defineProps<TheBreadcrumbsProps>();
@@ -21,7 +23,7 @@
 
     <ul class="flex items-center gap-3">
       <li
-        v-for="(link, index) in props.links"
+        v-for="(link, index) in props.breadcrumbs"
         :key="link.href"
         class="flex items-center gap-3"
       >
@@ -29,14 +31,15 @@
           :to="link.href"
           class="font-light hover:text-primary-500 transition-colors duration-100"
           :class="{
-            'text-primary-500 font-medium': index === props.links.length - 1,
+            'text-primary-500 font-medium':
+              index === props.breadcrumbs.length - 1,
           }"
         >
           {{ link.name }}
         </NuxtLink>
 
         <BaseSvg
-          v-if="index < props.links.length - 1"
+          v-if="index < props.breadcrumbs.length - 1"
           svg-name="icon-arrow-breadcrumbs"
         />
       </li>

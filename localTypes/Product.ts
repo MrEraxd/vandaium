@@ -1,4 +1,5 @@
 import type { ImageSize } from "@localTypes/ImageSize";
+import type { Breadcrumb } from "./Breadcrumbs";
 
 export interface Product {
   id: string;
@@ -9,6 +10,8 @@ export interface Product {
   energyClassCardLink: string;
   badges: ProductBadge[];
   reviews: ProductReviews;
+  breadcrumbs: Breadcrumb[];
+  additionalServices: ProductAdditionalServiceItem[];
 }
 
 export interface ProductDynamic {
@@ -20,7 +23,7 @@ export interface ProductDynamic {
 
 export type ProductImage = {
   alt: string;
-  sizes: Record<ImageSize, string | null | undefined>;
+  sizes: Record<ImageSize | "original", string | null | undefined>;
 };
 
 export type ProductSpecificationEntry = {
@@ -47,4 +50,35 @@ export type ProductReviewItem = {
   rating: number;
   date: string;
   content: string;
+};
+
+export type ProductAdditionalServiceItem = {
+  name: string;
+  linkToDetails: string;
+};
+
+export type ProductVariationGroup = {
+  groupType: "swatches" | "images" | "texts";
+  groupLabel: string;
+  groupName: string;
+  showLabel: boolean;
+  options: ProductVariationOption[];
+};
+
+export type ProductVariationOption = {
+  label: string;
+  value: string;
+};
+
+export type ProductVariationOptionImage = {
+  label: string;
+  value: string;
+  image: string;
+  alt: string;
+};
+
+export type ProductVariationOptionSwatch = {
+  label: string;
+  value: string;
+  color: string;
 };

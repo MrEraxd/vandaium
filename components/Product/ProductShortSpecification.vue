@@ -1,16 +1,20 @@
 <script setup lang="ts">
+  import type { ProductSpecificationEntry } from "@/localTypes/Product";
+
+  defineProps<{
+    energyClassCardLink: string;
+    energyClass: string;
+    shortSpecification: ProductSpecificationEntry[];
+  }>();
+
   function scrollToSpecification() {
     console.log("Implement scroll to specification");
   }
-
-  const { $api } = useNuxtApp();
-  const { data: product } = await $api.productService.getProduct();
 </script>
 
 <template>
   <div
-    v-if="product?.shortSpecification"
-    class="bg-white rounded-sm p-4 w-80 justify-between flex flex-col"
+    class="bg-white rounded-sm p-4 w-full justify-between shrink-0 flex flex-col"
   >
     <div>
       <div class="font-medium text-lg mb-8">Specyfikacja</div>
@@ -20,7 +24,7 @@
           <span>Klasa energetyczna</span>
           <NuxtLink
             class="text-sm leading-3 text-gray-500"
-            :to="product?.energyClassCardLink"
+            :to="energyClassCardLink"
           >
             Karta informacyjna
           </NuxtLink>
@@ -29,13 +33,13 @@
         <BaseSvg
           height="40px"
           icon-class="w-full h-full"
-          :svg-name="`energy-label-${product?.energyClass}`"
+          :svg-name="`energy-label-${energyClass}`"
         />
       </div>
 
       <ul class="flex gap-y-1 flex-col">
         <li
-          v-for="specEntry in product?.shortSpecification"
+          v-for="specEntry in shortSpecification"
           :key="specEntry.label"
         >
           <span class="font-light">{{ `${specEntry.label}: ` }}</span>
@@ -46,7 +50,7 @@
 
     <button
       @click="scrollToSpecification()"
-      class="flex items-center gap-x-2"
+      class="flex items-center gap-x-2 mt-20"
     >
       <span class="font-light text-gray-300">Zobacz pełną specyfikację</span>
       <BaseSvg svg-name="icon-arrow-interactive" />

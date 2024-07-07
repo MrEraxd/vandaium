@@ -1,23 +1,25 @@
 <script setup lang="ts">
-  const { $api } = useNuxtApp();
+  const { getProduct } = useProductService();
   const currentImageIndex = ref(0);
 
-  const { data: product } = await $api.productService.getProduct();
+  const { data: product } = await getProduct();
 </script>
 
 <template>
-  <div class="flex gap-x-3 items-start h-[480px]">
+  <div class="w-full flex flex-col 2xl:flex-row-reverse gap-3 items-start">
+    <div class="grid place-items-center w-full xl:grid-cols-2 gap-4">
+      <div
+        class="bg-white rounded-sm aspect-square p-16 xl:aspect-[9/13] object-contain flex items-center justify-center w-full"
+        v-for="image in product?.images"
+        :key="image.sizes.sm ?? 'default'"
+      >
+        <NuxtImg :src="image.sizes.sm ?? undefined" />
+      </div>
+    </div>
+
     <ProductGalleryPagination
-      class="h-full"
       v-model="currentImageIndex"
       :images="product?.images ?? []"
     />
-
-    <div class="aspect-square bg-white h-full p-16 grid place-items-center">
-      <NuxtImg
-        class=""
-        :src="product?.images?.[currentImageIndex]?.sizes.sm ?? undefined"
-      />
-    </div>
   </div>
 </template>

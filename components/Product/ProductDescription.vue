@@ -1,5 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>Desc</div>
+  <div class="p-4 bg-white rounded-sm">
+    <div class="font-medium text-lg mb-6">Opis</div>
+  </div>
 </template>

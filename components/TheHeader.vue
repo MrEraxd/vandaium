@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-white shadow-sm mb-4">
+  <header class="bg-white shadow-sm mb-4 h-32 sticky top-0 z-20">
     <div class="container mx-auto flex justify-between py-6">
       <NuxtLink to="/">
         <BaseSvg svg-name="logo" />

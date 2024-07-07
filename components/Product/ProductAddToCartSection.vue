@@ -3,6 +3,7 @@
     ProductDynamic,
     ProductBadge,
     ProductReviews,
+    ProductSize,
   } from "@localTypes/Product";
 
   defineProps<{
@@ -10,6 +11,7 @@
     catalogNumber: string;
     badges: ProductBadge[];
     reviews: ProductReviews;
+    sizes: ProductSize[];
   }>();
 
   const quantitySelected = ref(1);
@@ -25,7 +27,9 @@
 </script>
 
 <template>
-  <div class="flex-1 bg-white p-4 rounded-sm flex flex-col">
+  <div
+    class="flex-1 bg-white p-8 rounded-sm flex flex-col flex-shrink-0 sticky top-36"
+  >
     <div class="flex justify-between items-center mb-6">
       <div>
         <div
@@ -92,6 +96,14 @@
         {{ `Najniższa cena z 30dni: ${product.bestPrice}` }}
       </span>
     </div>
+
+    <!-- <ProductSizes :sizes="sizes" /> -->
+
+    <ProductVariationGroup
+      show-label
+      group-label="Rozmiar"
+      :options="sizes"
+    />
 
     <div class="flex flex-col gap-y-1">
       <div class="flex gap-x-2">

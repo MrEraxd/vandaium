@@ -1,36 +1,39 @@
 <script setup lang="ts">
-  import type { TheBreadcrumbsProps } from "@/components/TheBreadcrumbs.vue";
-
-  const breadcrumbsInfo: TheBreadcrumbsProps = {
-    links: [
-      { name: "Monitory", href: "/category/monitors" },
-      { name: "Monitory OLED", href: "/category/monitors-oled" },
-      { name: "Monitor MSI MPG 271QRX QD-OLED", href: "" },
-    ],
-  };
-
-  const { $api } = useNuxtApp();
-  const { data: product } = await $api.productService.getProduct();
+  const { getProduct } = useProductService();
+  const { data: product } = await getProduct();
 </script>
 
 <template>
   <div class="flex flex-col gap-y-3">
-    <TheBreadcrumbs v-bind="breadcrumbsInfo" />
+    <TheBreadcrumbs
+      v-if="product?.breadcrumbs"
+      :breadcrumbs="product.breadcrumbs"
+    />
 
-    <div class="flex gap-x-3">
-      <ProductGallery />
+    <div class="grid grid-cols-[1fr_520px] gap-x-3">
+      <div class="flex flex-col gap-y-3">
+        <div class="gap-3 grid items-start">
+          <ProductGallery class="min-w-0" />
+        </div>
 
-      <ProductShortSpecification />
+        <ProductDescription />
+      </div>
 
-      <ProductAddToCartSection
-        v-if="product"
-        :badges="product?.badges"
-        :product-name="product?.name"
-        :catalog-number="product?.id"
-        :reviews="product?.reviews"
-      />
+      <div class="grid items-start gap-y-3">
+        <ProductAddToCartSection
+          v-if="product"
+          :badges="product?.badges"
+          :product-name="product?.name"
+          :catalog-number="product?.id"
+          :reviews="product?.reviews"
+          :sizes="product?.sizes"
+        />
+
+        <!-- <ProductAdditionalServices
+          v-if="product?.additionalServices"
+          :additional-services="product.additionalServices"
+        /> -->
+      </div>
     </div>
-
-    <ProductDescription />
   </div>
 </template>
