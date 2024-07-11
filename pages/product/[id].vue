@@ -1,6 +1,8 @@
 <script setup lang="ts">
   const { getProduct } = useProductService();
   const { data: product } = await getProduct();
+
+  const { apiClient } = useShopwareContext();
 </script>
 
 <template>
@@ -26,7 +28,7 @@
           :product-name="product?.name"
           :catalog-number="product?.id"
           :reviews="product?.reviews"
-          :sizes="product?.sizes"
+          :variation-groups="product?.variationGroups"
         />
 
         <!-- <ProductAdditionalServices

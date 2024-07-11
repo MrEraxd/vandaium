@@ -3,7 +3,7 @@
     ProductDynamic,
     ProductBadge,
     ProductReviews,
-    ProductSize,
+    ProductVariationPossibleGroups,
   } from "@localTypes/Product";
 
   defineProps<{
@@ -11,12 +11,12 @@
     catalogNumber: string;
     badges: ProductBadge[];
     reviews: ProductReviews;
-    sizes: ProductSize[];
+    variationGroups: ProductVariationPossibleGroups[];
   }>();
 
   const quantitySelected = ref(1);
 
-  const { data: product, pending } = await useAsyncData<ProductDynamic>(
+  const { data: productDynamic, pending } = await useAsyncData<ProductDynamic>(
     "productLive",
     () => $fetch("http://127.0.0.1:8000/products/289012312/dynamic"),
     {
@@ -76,33 +76,33 @@
       <div class="flex items-end gap-x-2">
         <span
           class="text-primary-500 text-2xl font-medium leading-6"
-          v-if="product?.price"
+          v-if="productDynamic?.price"
         >
-          {{ product.price }}
+          {{ productDynamic.price }}
         </span>
 
         <span
           class="line-through font-medium leading-4"
-          v-if="product?.priceBeforeDiscount"
+          v-if="productDynamic?.priceBeforeDiscount"
         >
-          {{ product.priceBeforeDiscount }}
+          {{ productDynamic.priceBeforeDiscount }}
         </span>
       </div>
 
       <span
         class="text-xs leading-3"
-        v-if="product?.bestPrice"
+        v-if="productDynamic?.bestPrice"
       >
-        {{ `Najniższa cena z 30dni: ${product.bestPrice}` }}
+        {{ `Najniższa cena z 30dni: ${productDynamic.bestPrice}` }}
       </span>
     </div>
 
     <!-- <ProductSizes :sizes="sizes" /> -->
 
     <ProductVariationGroup
-      show-label
-      group-label="Rozmiar"
-      :options="sizes"
+      v-for="group in variationGroups"
+      :key="group.groupName"
+      :group="group"
     />
 
     <div class="flex flex-col gap-y-1">
@@ -122,10 +122,10 @@
       />
 
       <div
-        v-if="product?.availableAmount"
+        v-if="productDynamic?.availableAmount"
         class="text-xs text-gray-600 h-4"
       >
-        {{ `Pozostało sztuk: ${product?.availableAmount}` }}
+        {{ `Pozostało sztuk: ${productDynamic?.availableAmount}` }}
       </div>
     </div>
   </div>

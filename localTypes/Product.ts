@@ -12,6 +12,7 @@ export interface Product {
   reviews: ProductReviews;
   breadcrumbs: Breadcrumb[];
   additionalServices: ProductAdditionalServiceItem[];
+  variationGroups: ProductVariationPossibleGroups[];
 }
 
 export interface ProductDynamic {
@@ -57,15 +58,36 @@ export type ProductAdditionalServiceItem = {
   linkToDetails: string;
 };
 
-export type ProductVariationGroup = {
-  groupType: "swatches" | "images" | "texts";
-  groupLabel: string;
-  groupName: string;
-  showLabel: boolean;
-  options: ProductVariationOption[];
-};
+// export type ProductVariationGroup = {
+//   groupType: "swatches" | "images" | "texts";
+//   groupLabel: string;
+//   groupName: string;
+//   showLabel: boolean;
+//   options:
+//     | ProductVariationOptionText[]
+//     | ProductVariationOptionImage[]
+//     | ProductVariationOptionSwatch[];
+// };
 
-export type ProductVariationOption = {
+// export type ProductVariationOptionText = {
+//   label: string;
+//   value: string;
+// };
+
+// export type ProductVariationOptionImage = {
+//   label: string;
+//   value: string;
+//   image: string;
+//   alt: string;
+// };
+
+// export type ProductVariationOptionSwatch = {
+//   label: string;
+//   value: string;
+//   color: string;
+// };
+
+export type ProductVariationOptionText = {
   label: string;
   value: string;
 };
@@ -82,3 +104,26 @@ export type ProductVariationOptionSwatch = {
   value: string;
   color: string;
 };
+
+type GroupTypeToOption<T extends "color" | "image" | "text"> = T extends "color"
+  ? ProductVariationOptionSwatch
+  : T extends "image"
+  ? ProductVariationOptionImage
+  : T extends "text"
+  ? ProductVariationOptionText
+  : never;
+
+export type ProductVariationGroupWithType<
+  T extends "color" | "image" | "text"
+> = {
+  groupType: T;
+  groupLabel: string;
+  groupName: string;
+  showLabel: boolean;
+  options: GroupTypeToOption<T>[];
+};
+
+export type ProductVariationPossibleGroups =
+  | ProductVariationGroupWithType<"color">
+  | ProductVariationGroupWithType<"image">
+  | ProductVariationGroupWithType<"text">;
