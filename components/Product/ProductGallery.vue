@@ -10,16 +10,16 @@
     <div class="grid place-items-center w-full xl:grid-cols-2 gap-4">
       <div
         class="bg-white rounded-sm aspect-square p-16 xl:aspect-[9/13] object-contain flex items-center justify-center w-full"
-        v-for="image in product?.images"
-        :key="image.sizes.sm ?? 'default'"
+        v-for="media in product?.product?.media"
+        :key="media.media.url"
       >
-        <NuxtImg :src="image.sizes.sm ?? undefined" />
+        <NuxtImg :src="media.media.url ?? undefined" />
       </div>
     </div>
 
-    <ProductGalleryPagination
+    <!-- <ProductGalleryPagination
       v-model="currentImageIndex"
       :images="product?.images ?? []"
-    />
+    /> -->
   </div>
 </template>

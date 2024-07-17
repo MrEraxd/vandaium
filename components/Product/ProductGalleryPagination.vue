@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { ProductImage } from "@localTypes/Product";
+  import type { ProductImage } from "@localTypes/ShopwareProduct";
 
   export interface ProductGalleryPaginationProps {
     images: ProductImage[];

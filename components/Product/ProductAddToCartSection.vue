@@ -1,29 +1,35 @@
 <script setup lang="ts">
-  import type {
-    ProductDynamic,
-    ProductBadge,
-    ProductReviews,
-    ProductVariationPossibleGroups,
-  } from "@localTypes/Product";
+  import type { ShopwareProductSimplified } from "@localTypes/ShopwareProduct";
 
-  defineProps<{
-    productName: string;
-    catalogNumber: string;
-    badges: ProductBadge[];
-    reviews: ProductReviews;
-    variationGroups: ProductVariationPossibleGroups[];
-  }>();
+  const { getProduct } = useProductService();
+  const { data: product } = await getProduct();
+
+  // import type {
+  //   ProductDynamic,
+  //   ProductBadge,
+  //   ProductReviews,
+  //   ProductVariationPossibleGroups,
+  // } from "@localTypes/ShopwareProduct";
+
+  // defineProps<{
+  //   productName: string;
+  //   catalogNumber: string;
+  //   badges: ProductBadge[];
+  //   reviews: ProductReviews;
+  //   variationGroups: ProductVariationPossibleGroups[];
+  // }>();
 
   const quantitySelected = ref(1);
 
-  const { data: productDynamic, pending } = await useAsyncData<ProductDynamic>(
-    "productLive",
-    () => $fetch("http://127.0.0.1:8000/products/289012312/dynamic"),
-    {
-      dedupe: "cancel",
-      server: false,
-    }
-  );
+  const { data: productDynamic, pending } =
+    await useAsyncData<ShopwareProductSimplified>(
+      "productLive",
+      () => $fetch("http://127.0.0.1:8000/products/289012312/dynamic"),
+      {
+        dedupe: "cancel",
+        server: false,
+      }
+    );
 </script>
 
 <template>
@@ -31,7 +37,7 @@
     class="flex-1 bg-white p-8 rounded-sm flex flex-col flex-shrink-0 sticky top-36"
   >
     <div class="flex justify-between items-center mb-6">
-      <div>
+      <!-- <div>
         <div
           v-for="badge in badges"
           :key="badge.label"
@@ -43,7 +49,7 @@
         >
           {{ badge.label }}
         </div>
-      </div>
+      </div> -->
 
       <div class="flex gap-x-2 items-center">
         <BaseSvg svg-name="icon-scale" />
@@ -51,17 +57,19 @@
       </div>
     </div>
 
-    <ProductReview
+    <!-- <ProductReview
       class="mb-1"
       :rating="reviews.rating"
       :number-of-reviews="reviews.items.length"
-    />
+    /> -->
 
     <div class="mb-10">
-      <h1 class="font-medium text-xl">{{ productName }}</h1>
-      <div class="text-xs text-gray-300 leading-3">
+      <h1 class="font-medium text-xl">
+        {{ product?.product.translated.name }}
+      </h1>
+      <!-- <div class="text-xs text-gray-300 leading-3">
         {{ `Nr katalogowy: ${catalogNumber}` }}
-      </div>
+      </div> -->
     </div>
 
     <div
@@ -76,24 +84,26 @@
       <div class="flex items-end gap-x-2">
         <span
           class="text-primary-500 text-2xl font-medium leading-6"
-          v-if="productDynamic?.price"
+          v-if="productDynamic?.calculatedPrice.totalPrice"
         >
-          {{ productDynamic.price }}
+          {{ productDynamic.calculatedPrice.totalPrice }}
         </span>
 
         <span
           class="line-through font-medium leading-4"
-          v-if="productDynamic?.priceBeforeDiscount"
+          v-if="productDynamic?.calculatedPrice.listPrice.price"
         >
-          {{ productDynamic.priceBeforeDiscount }}
+          {{ productDynamic.calculatedPrice.listPrice.price }}
         </span>
       </div>
 
       <span
         class="text-xs leading-3"
-        v-if="productDynamic?.bestPrice"
+        v-if="productDynamic?.calculatedPrice.regulationPrice.price"
       >
-        {{ `Najniższa cena z 30dni: ${productDynamic.bestPrice}` }}
+        {{
+          `Najniższa cena z 30dni: ${productDynamic.calculatedPrice.regulationPrice.price}`
+        }}
       </span>
     </div>
 

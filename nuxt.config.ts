@@ -52,6 +52,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBaseUrl: "",
+      swApiToken: "",
     },
   },
 });

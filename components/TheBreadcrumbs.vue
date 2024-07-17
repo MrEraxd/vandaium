@@ -1,15 +1,13 @@
 <script setup lang="ts">
-  import type { Breadcrumb } from "~/localTypes/Breadcrumbs";
-
-  export interface TheBreadcrumbsProps {
-    breadcrumbs: Breadcrumb[];
-  }
-
-  const props = defineProps<TheBreadcrumbsProps>();
+  const { getProduct } = useProductService();
+  const { data: product } = await getProduct();
 </script>
 
 <template>
-  <div class="p-3 bg-white rounded-sm flex items-center gap-3">
+  <div
+    v-if="product?.product.categoryTree"
+    class="p-3 bg-white rounded-sm flex items-center gap-3"
+  >
     <div class="flex gap-3 items-center">
       <NuxtLink to="/">
         <BaseSvg
@@ -23,23 +21,23 @@
 
     <ul class="flex items-center gap-3">
       <li
-        v-for="(link, index) in props.breadcrumbs"
-        :key="link.href"
+        v-for="(id, index) in product?.product.categoryTree"
+        :key="id"
         class="flex items-center gap-3"
       >
         <NuxtLink
-          :to="link.href"
+          :to="id"
           class="font-light hover:text-primary-500 transition-colors duration-100"
           :class="{
             'text-primary-500 font-medium':
-              index === props.breadcrumbs.length - 1,
+              index === product?.product.categoryTree.length - 1,
           }"
         >
-          {{ link.name }}
+          {{ id }}
         </NuxtLink>
 
         <BaseSvg
-          v-if="index < props.breadcrumbs.length - 1"
+          v-if="index < product?.product.categoryTree.length - 1"
           svg-name="icon-arrow-breadcrumbs"
         />
       </li>

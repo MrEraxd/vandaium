@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { ProductSize } from "@localTypes/Product";
+  import type { ProductSize } from "@localTypes/ShopwareProduct";
 
   export interface ProductSizesProps {
     sizes: ProductSize[];

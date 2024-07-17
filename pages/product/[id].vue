@@ -1,16 +1,11 @@
 <script setup lang="ts">
   const { getProduct } = useProductService();
   const { data: product } = await getProduct();
-
-  const { apiClient } = useShopwareContext();
 </script>
 
 <template>
   <div class="flex flex-col gap-y-3">
-    <TheBreadcrumbs
-      v-if="product?.breadcrumbs"
-      :breadcrumbs="product.breadcrumbs"
-    />
+    <TheBreadcrumbs />
 
     <div class="grid grid-cols-[1fr_520px] gap-x-3">
       <div class="flex flex-col gap-y-3">
@@ -22,14 +17,7 @@
       </div>
 
       <div class="grid items-start gap-y-3">
-        <ProductAddToCartSection
-          v-if="product"
-          :badges="product?.badges"
-          :product-name="product?.name"
-          :catalog-number="product?.id"
-          :reviews="product?.reviews"
-          :variation-groups="product?.variationGroups"
-        />
+        <ProductAddToCartSection />
 
         <!-- <ProductAdditionalServices
           v-if="product?.additionalServices"
