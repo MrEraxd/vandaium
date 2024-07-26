@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <NuxtLink to="/product/2a88d9b59d474c7e869d8071649be43c">
+    <NuxtLink to="/product/43a23e0c03bf4ceabc6055a2185faa87">
       Product 1
     </NuxtLink>
   </div>

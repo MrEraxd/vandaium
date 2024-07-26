@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "nuxt-svgo-loader",
     "@vueuse/nuxt",
+    "@nuxtjs/i18n"
   ],
   css: ["~/assets/styles/tailwind.pcss", "~/assets/styles/main.pcss"],
   components: ["~/components", "~/components/Blocks"],

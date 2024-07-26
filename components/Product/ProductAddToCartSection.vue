@@ -1,35 +1,54 @@
 <script setup lang="ts">
-  import type { ShopwareProductSimplified } from "@localTypes/ShopwareProduct";
-
-  const { getProduct } = useProductService();
+  const { getProduct, getProductDynamic, getProductAvailableVariants } =
+    useProductService();
   const { data: product } = await getProduct();
+  const { data: productDynamic, pending } = await getProductDynamic();
+  const { data: availableVariants } = await getProductAvailableVariants();
 
-  // import type {
-  //   ProductDynamic,
-  //   ProductBadge,
-  //   ProductReviews,
-  //   ProductVariationPossibleGroups,
-  // } from "@localTypes/ShopwareProduct";
+  const selectedValues = ref<string[]>([]);
+  const options = reactive({
+    // GroupId: SelectedOptionId
+  });
 
-  // defineProps<{
-  //   productName: string;
-  //   catalogNumber: string;
-  //   badges: ProductBadge[];
-  //   reviews: ProductReviews;
-  //   variationGroups: ProductVariationPossibleGroups[];
-  // }>();
+  product.value?.configurator.forEach((group) => {
+    const newObj = {
+      [group.id]: "",
+    };
+
+    Object.assign(options, newObj);
+  });
+
+  const allAvailableOptions = computed(() => {
+    const options: string[] = [];
+
+    availableVariants?.value?.elements.forEach((elem) => {
+      options.push(...elem.optionIds);
+    });
+
+    return options;
+  });
+
+  const selectedOptions = computed(() => {
+    return Object.values(options)?.filter((option) => option !== "") || [];
+  });
+
+  const availableOptionsWithCurrentlySelectedOptions = computed(() => {
+    const options: string[] = [];
+
+    availableVariants?.value?.elements
+      .filter((item) => {
+        return item.optionIds.some((option) =>
+          selectedOptions.value.includes(option)
+        );
+      })
+      .forEach((elem) => {
+        options.push(...elem.optionIds);
+      });
+
+    return options;
+  });
 
   const quantitySelected = ref(1);
-
-  const { data: productDynamic, pending } =
-    await useAsyncData<ShopwareProductSimplified>(
-      "productLive",
-      () => $fetch("http://127.0.0.1:8000/products/289012312/dynamic"),
-      {
-        dedupe: "cancel",
-        server: false,
-      }
-    );
 </script>
 
 <template>
@@ -37,6 +56,7 @@
     class="flex-1 bg-white p-8 rounded-sm flex flex-col flex-shrink-0 sticky top-36"
   >
     <div class="flex justify-between items-center mb-6">
+      <!-- Shopware is not supporting bages/tags by default -->
       <!-- <div>
         <div
           v-for="badge in badges"
@@ -51,7 +71,7 @@
         </div>
       </div> -->
 
-      <div class="flex gap-x-2 items-center">
+      <div class="flex gap-x-2 items-center ml-auto">
         <BaseSvg svg-name="icon-scale" />
         <BaseSvg svg-name="icon-add-to-wishlist" />
       </div>
@@ -84,35 +104,41 @@
       <div class="flex items-end gap-x-2">
         <span
           class="text-primary-500 text-2xl font-medium leading-6"
-          v-if="productDynamic?.calculatedPrice.totalPrice"
+          v-if="productDynamic?.product?.calculatedPrice?.totalPrice"
         >
-          {{ productDynamic.calculatedPrice.totalPrice }}
+          {{ `${productDynamic.product.calculatedPrice.totalPrice} €` }}
         </span>
 
         <span
           class="line-through font-medium leading-4"
-          v-if="productDynamic?.calculatedPrice.listPrice.price"
+          v-if="productDynamic?.product?.calculatedPrice?.listPrice?.price"
         >
-          {{ productDynamic.calculatedPrice.listPrice.price }}
+          {{ `${productDynamic.product.calculatedPrice.listPrice.price} €` }}
         </span>
       </div>
 
       <span
-        class="text-xs leading-3"
-        v-if="productDynamic?.calculatedPrice.regulationPrice.price"
+        class="text-xs leading-3 text-gray-500"
+        v-if="productDynamic?.product?.calculatedPrice?.regulationPrice?.price"
       >
         {{
-          `Najniższa cena z 30dni: ${productDynamic.calculatedPrice.regulationPrice.price}`
+          `Best price from last 30 days: ${productDynamic.product.calculatedPrice.regulationPrice.price} €`
         }}
       </span>
     </div>
 
     <!-- <ProductSizes :sizes="sizes" /> -->
 
-    <ProductVariationGroup
-      v-for="group in variationGroups"
-      :key="group.groupName"
-      :group="group"
+    <ProductPropertyGroup
+      v-for="propertyGroup in product?.configurator"
+      :key="propertyGroup.name"
+      :group="propertyGroup"
+      :available-options="allAvailableOptions"
+      :available-options-with-currently-selected-options="
+        availableOptionsWithCurrentlySelectedOptions
+      "
+      :selected-options="selectedOptions"
+      v-model="options[propertyGroup.id as keyof typeof options]"
     />
 
     <div class="flex flex-col gap-y-1">
@@ -124,18 +150,6 @@
         </BaseSelect>
 
         <BaseButton />
-      </div>
-
-      <div
-        v-if="pending"
-        class="h-4 animate-pulse bg-gray-200 rounded-sm w-32 self-start"
-      />
-
-      <div
-        v-if="productDynamic?.availableAmount"
-        class="text-xs text-gray-600 h-4"
-      >
-        {{ `Pozostało sztuk: ${productDynamic?.availableAmount}` }}
       </div>
     </div>
   </div>

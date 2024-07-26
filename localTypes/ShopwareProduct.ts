@@ -11,6 +11,7 @@ export interface ShopwareProduct {
     categoryTree: string[];
     media: ShopwareProductMedia[];
   };
+  configurator: ShopwarePropertyGroup[];
   // id: string;
   // name: string;
   // images: ProductImage[];
@@ -34,17 +35,46 @@ export type ShopwareMedia = {
   url: string;
 };
 
+export type ShopwarePropertyGroup = {
+  apiAlias: "property_group";
+  position: number;
+  displayType: "color" | "image" | "text" | "dropdown";
+  translated: {
+    name: string;
+  };
+  name: string;
+  options: ShopwarePropertyGroupOption[];
+  id: string;
+};
+
+export type ShopwarePropertyGroupOption = {
+  apiAlias: "property_group_option";
+  translated: {
+    name: string;
+  };
+  colorHexCode?: string;
+  id: string;
+};
+
 export interface ShopwareProductSimplified {
   apiAlias: "calculated_price";
-  calculatedPrice: {
-    totalPrice: number; // Price before discount
-    listPrice: {
-      price: number; // Price after discount
-    };
-    regulationPrice: {
-      price: number; // 30 days best price
+  product: {
+    calculatedPrice: {
+      totalPrice: number; // Price before discount
+      listPrice?: {
+        price: number; // Price after discount
+      };
+      regulationPrice?: {
+        price: number; // 30 days best price
+      };
     };
   };
+}
+
+export interface ShopwareProductVariant {
+  apiAlias: "product";
+  id: string;
+  optionIds: string[];
 }
 
 // export interface ProductDynamic {
